@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile | FairPlay P2P</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body class="app-layout">
+
+    <aside class="sidebar">
+        <h2 class="logo">FairPlay</h2>
+        <nav>
+            <a href="markets.html">Live Markets</a>
+            <a href="active-bets.html">My Active Bets</a>
+            <a href="wallets.html">Wallet & Deposits</a>
+            <a href="profile.html" class="active">My Profile</a>
+            <hr>
+            <a href="login.html" id="logout-btn">Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h1>Account Settings</h1>
+            <p class="text-muted">Manage your personal profile and security preferences.</p>
+        </header>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+            
+            <section class="card">
+                <h3 class="text-gold" style="margin-bottom: 20px;">Personal Information</h3>
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="prof-username" disabled style="opacity: 0.7; cursor: not-allowed;">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="prof-email">
+                    </div>
+                    <button type="submit" class="btn btn-gold">Save Changes</button>
+                </form>
+            </section>
+
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                
+                <section class="card">
+                    <h3 class="text-gold" style="margin-bottom: 20px;">Security</h3>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="new-password" placeholder="••••••••">
+                    </div>
+                    <button id="update-password-btn" class="btn btn-outline" style="width: 100%;">Update Password</button>
+                </section>
+
+                <section class="card">
+                    <h3 class="text-gold" style="margin-bottom: 20px;">Trading Stats</h3>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span class="text-muted">Win Rate:</span>
+                        <span class="text-success">64%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span class="text-muted">Total Bets:</span>
+                        <span id="stat-total-bets" style="font-weight: bold;">0</span>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="js/auth-guard.js"></script>
+    <script type="module" src="js/profile.js"></script>
+</body>
+</html>

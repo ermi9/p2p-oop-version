@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Wallet | FairPlay P2P</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body class="app-layout">
+
+    <aside class="sidebar">
+        <h2 class="logo">FairPlay</h2>
+        <nav>
+            <a href="markets.html">Live Markets</a>
+            <a href="active-bets.html">My Active Bets</a>
+            <a href="wallets.html" class="active">Wallet & Deposits</a>
+            <a href="profile.html">My Profile</a>
+            <hr>
+            <a href="login.html" id="logout-btn">Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h1>My Wallet</h1>
+            <p class="text-muted">Manage your funds and view transaction history.</p>
+        </header>
+
+        <section class="card" style="margin-bottom: 40px; text-align: center; padding: 40px;">
+            <p class="text-muted" style="text-transform: uppercase; font-size: 12px; letter-spacing: 1px; margin-bottom: 10px;">Total Available Balance</p>
+            <h2 style="font-size: 48px; margin-bottom: 10px;">$<span id="available-balance">0.00</span></h2>
+            
+            <p class="text-muted" style="font-size: 14px; margin-bottom: 30px;">
+                Reserved in Active Offers: <span id="reserved-balance" class="text-gold">$0.00</span>
+            </p>
+            
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="deposit-btn" class="btn btn-gold">Deposit Funds</button>
+                <button id="withdraw-btn" class="btn btn-outline">Withdraw</button>
+            </div>
+        </section>
+
+        <section>
+            <h3 style="margin-bottom: 20px; font-size: 20px;">Recent Activity</h3>
+            
+            <div id="transaction-list">
+                <div class="text-muted" style="text-align: center; padding: 40px;">
+                    Loading your activity...
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/auth-guard.js"></script>
+    <script type="module" src="js/wallets.js"></script>
+</body>
+</html>

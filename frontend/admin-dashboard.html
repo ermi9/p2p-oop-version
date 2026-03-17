@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel | FairPlay</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body class="app-layout">
+
+    <aside class="sidebar">
+        <h2 class="logo">FairPlay <span style="font-size: 10px; vertical-align: middle; opacity: 0.6;">ADMIN</span></h2>
+        <nav>
+            <a href="admin-dashboard.html" class="active">Platform Overview</a>
+            <hr>
+            <a href="login.html" id="logout-btn">Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p class="text-muted">Monitor platform activity and settle market results.</p>
+            </div>
+            <button class="btn btn-gold btn-sync">Sync External Fixtures</button>
+        </header>
+
+        <section style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px;">
+            <div class="card" style="text-align: center;">
+                <label class="text-muted" style="font-size: 11px; text-transform: uppercase;">Total Users</label>
+                <h2 id="stat-users" style="font-size: 32px; margin-top: 10px;">0</h2>
+            </div>
+            <div class="card" style="text-align: center;">
+                <label class="text-muted" style="font-size: 11px; text-transform: uppercase;">Active Fixtures</label>
+                <h2 id="stat-fixtures" style="font-size: 32px; margin-top: 10px;">0</h2>
+            </div>
+            <div class="card card-gold-border" style="text-align: center; background: rgba(176, 141, 87, 0.05);">
+                <label class="text-muted" style="font-size: 11px; text-transform: uppercase;">Locked Stake (Escrow)</label>
+                <h2 id="stat-escrow" class="text-gold" style="font-size: 32px; margin-top: 10px;">$0.00</h2>
+            </div>
+        </section>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+            
+            <section>
+                <h3 style="margin-bottom: 20px; font-size: 18px;">Registered Users</h3>
+                <div id="admin-user-list">
+                    <p class="text-muted">Loading users...</p>
+                </div>
+            </section>
+
+            <section>
+                <h3 style="margin-bottom: 20px; font-size: 18px;">Market Settlement</h3>
+                <p class="text-muted" style="font-size: 12px; margin-bottom: 15px;">Only fixtures with active trading activity are shown here.</p>
+                <div id="fixture-settle-list">
+                    <p class="text-muted">Loading fixtures...</p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script type="module" src="js/admin.js"></script>
+
+</body>
+</html>

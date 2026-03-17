@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trading Center | FairPlay P2P</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body class="app-layout">
+
+    <input type="checkbox" id="post-offer-toggle" class="toggle-input">
+
+    <aside class="sidebar">
+        <h2 class="logo">FairPlay</h2>
+        <nav>
+            <a href="markets.html" style="font-weight: bold; color: var(--gold);">← Back to Markets</a>
+            <hr>
+            <a href="active-bets.html">My Active Bets</a>
+            <a href="wallets.html" id="user-balance-nav">Wallet: $0.00</a>
+            <a href="profile.html">My Profile</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        <header id="match-title" class="page-header" style="margin-bottom: 20px;">
+            <div class="text-muted" style="text-align: center;">Loading match data...</div>
+        </header>
+
+        <section class="card" style="margin-bottom: 30px; padding: 20px;">
+            <p class="text-muted" style="font-size: 11px; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px;">Best Bookmaker Odds (Reference Only)</p>
+            <div id="reference-odds-container" style="display: flex; gap: 10px;">
+                </div>
+        </section>
+
+        <section>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="font-size: 20px;">Peer-to-Peer Marketplace</h2>
+                <label for="post-offer-toggle" class="btn btn-gold">+ Post New Offer</label>
+            </div>
+
+            <div id="offers-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay">
+        <div class="card" style="width: 100%; max-width: 400px; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 class="text-gold">Post Your Offer</h2>
+                <label for="post-offer-toggle" style="cursor: pointer; font-size: 24px;">&times;</label>
+            </div>
+            
+            <form id="create-offer-form">
+                <div class="form-group">
+                    <label>Selection</label>
+                    <select required>
+                        <option value="HOME_WIN">Home Win (1)</option>
+                        <option value="DRAW">Draw (X)</option>
+                        <option value="AWAY_WIN">Away Win (2)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Your Odds</label>
+                    <input type="number" step="0.01" min="1.01" placeholder="e.g. 2.25" required>
+                </div>
+                <div class="form-group">
+                    <label>Stake (Amount you want to win)</label>
+                    <input type="number" step="1" min="1" placeholder="e.g. 100" required>
+                </div>
+                <button type="submit" class="btn btn-gold" style="width: 100%; margin-top: 10px;">Confirm & Post</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/auth-guard.js"></script>
+    <script type="module" src="js/trading.js"></script>
+
+</body>
+</html>

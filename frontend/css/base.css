@@ -1,0 +1,79 @@
+
+/*1. VARIABLES & RESET */
+
+:root {
+    --bg-dark: #0f172a;
+    --bg-card: #1e293b;
+    --border-muted: #334155;
+    --gold: #b08d57;
+    --gold-hover: #94764a;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --sidebar-width: 260px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+}
+
+/* 2. LAYOUT ENGINE */
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--bg-card);
+    padding: 30px;
+    border-right: 1px solid var(--border-muted);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px;
+}
+
+.centered-layout {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+  /* 3. SIDEBAR NAVIGATION*/
+
+.sidebar nav a {
+    display: block;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.sidebar nav a.active {
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.sidebar hr {
+    border: 0;
+    border-top: 1px solid var(--border-muted);
+    margin: 20px 0;
+}

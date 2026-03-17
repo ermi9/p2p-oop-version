@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Active Bets | FairPlay P2P</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body class="app-layout">
+
+    <aside class="sidebar">
+        <h2 class="logo">FairPlay</h2>
+        <nav>
+            <a href="markets.html">Live Markets</a>
+            <a href="active-bets.html" class="active">My Active Bets</a>
+            <a href="wallets.html">Wallet & Deposits</a>
+            <a href="profile.html">My Profile</a>
+            <hr>
+            <a href="login.html" id="logout-btn">Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h1>My Active Bets</h1>
+            <p class="text-muted">Track your open offers and matched live bets.</p>
+        </header>
+
+        <section style="margin-bottom: 40px;">
+            <h3 class="text-gold" style="margin-bottom: 20px; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">Unmatched Offers (Waiting)</h3>
+            
+            <div id="unmatched-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                <div class="text-muted" style="padding: 20px;">Loading open offers...</div>
+            </div>
+        </section>
+
+        <section>
+            <h3 class="text-success" style="margin-bottom: 20px; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">Matched Bets (Live)</h3>
+            
+            <div id="matched-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                <div class="text-muted" style="padding: 20px;">Loading matched trades...</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/auth-guard.js"></script>
+    <script type="module" src="js/active-bets.js"></script>
+
+</body>
+</html>

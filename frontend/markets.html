@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Markets | FairPlay Exchange</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body class="app-layout">
+
+    <aside class="sidebar">
+        <h2 class="logo">FairPlay</h2>
+        <nav>
+            <a href="markets.html" class="active">Live Markets</a>
+            <a href="active-bets.html">My Active Bets</a>
+            <a href="wallets.html">Wallet & Deposits</a>
+            <a href="profile.html">My Profile</a>
+            <hr>
+            <a href="login.html" id="logout-btn">Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1>Select a Fixture</h1>
+                <p class="text-muted">Choose a match to start peer-to-peer trading</p>
+            </div>
+            <a href="wallets.html" id="user-balance" class="btn btn-outline">Balance: $0.00</a>
+        </header>
+
+        <section id="leagues-container" class="accordion-container">
+            <div class="text-muted" style="text-align: center; padding: 40px;">
+                Loading live fixtures...
+            </div>
+        </section>
+
+    </main>
+
+    <script src="js/auth-guard.js"></script>
+    <script type="module" src="js/markets.js"></script>
+
+</body>
+</html>

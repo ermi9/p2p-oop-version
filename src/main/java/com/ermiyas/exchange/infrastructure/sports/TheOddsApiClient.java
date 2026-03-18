@@ -1,14 +1,12 @@
 package com.ermiyas.exchange.infrastructure.sports;
 
 import com.ermiyas.exchange.domain.model.Event;
-import com.ermiyas.exchange.domain.model.EventStatus;
 import com.ermiyas.exchange.domain.vo.Odds;
 import com.ermiyas.exchange.infrastructure.sports.dto.TheOddsApiFixtureDto;
 import com.ermiyas.exchange.infrastructure.sports.dto.TheOddsApiOddsDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import com.ermiyas.exchange.domain.model.MarketType;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -69,13 +67,13 @@ public class TheOddsApiClient implements SportsDataProvider {
                     continue;
                 }
                 
-                // ✓ VALIDATION: Ensure start time is reasonable (not in 1970)
+                //  Ensure start time is reasonable (not in 1970)
                 if (dto.getStartTime().getYear() < 2020) {
                     logger.warning("[FIXTURES] Skipping fixture " + dto.getId() + ": unrealistic start time " + dto.getStartTime());
                     continue;
                 }
                 
-                // ✓ All validations passed - create event
+                //  validations passed - create event
                 Event event = new Event(
                     0L,
                     dto.getId(),

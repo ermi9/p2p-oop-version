@@ -15,8 +15,12 @@ target/
 .project/
 .classpath/
 
-# API key
+# API key / secrets
 src/main/resources/application.properties
+.env
+
+# Old web frontend (not part of this version)
+frontend/
 
 # OS files
 .DS_Store

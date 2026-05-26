@@ -1,3 +1,5 @@
 package com.ermiyas.exchange.domain.model;
 
-public enum BetStatus { MATCHED, SETTLED }
+public enum BetStatus {
+    MATCHED, SETTLED, CANCELLED
+}

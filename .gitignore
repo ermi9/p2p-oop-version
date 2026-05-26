@@ -25,3 +25,6 @@ frontend/
 # OS files
 .DS_Store
 Thumbs.db
+
+# LibreOffice lock files
+.~lock.*#

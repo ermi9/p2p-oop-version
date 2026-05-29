@@ -1,6 +1,6 @@
 # P2P Betting Exchange — Pure OOP (Java SE 17 / Swing)
 
-![Java](https://img.shields.io/badge/Java-17-orange?logo=java) ![License](https://img.shields.io/github/license/ermi9/p2p-oop-version) ![Stars](https://img.shields.io/github/stars/ermi9/p2p-oop-version?style=social)
+![Java](https://img.shields.io/badge/Java-17-orange?logo=java) ![License](https://img.shields.io/github/license/ermi9/p2p-oop-version) ![Stars](https://img.shields.io/github/stars/ermi9/p2p-oop-version?style=social) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
 A peer-to-peer sports betting exchange built entirely in pure Java SE 17 with a Swing desktop UI.
 No frameworks, no databases, no external APIs — all state lives in in-memory maps inside `Exchange.java`.

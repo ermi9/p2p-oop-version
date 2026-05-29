@@ -14,13 +14,9 @@ mvn package -DskipTests
 java -jar target/exchange-1.0.0.jar
 ```
 
-## Demo accounts (seeded on startup)
+## Demo accounts
 
-| Username | Password  | Role          | Balance |
-|----------|-----------|---------------|---------|
-| admin    | admin123  | AdminUser     | —       |
-| ermi     | ermi123   | StandardUser  | £1000   |
-| nate     | nate123   | StandardUser  | £1000   |
+Two standard user accounts and one admin account are seeded on startup. You can also register your own account from the login screen.
 
 ---
 

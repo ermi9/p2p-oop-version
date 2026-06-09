@@ -14,26 +14,28 @@ public class Event {
 
     private static final DateTimeFormatter DISPLAY_FMT = DateTimeFormatter.ofPattern("dd MMM HH:mm");
 
-    private final Long          id;
-    private final String        homeTeam;
-    private final String        awayTeam;
-    private final LocalDateTime kickOff;
-    private final League        league;
-    private final MarketType    marketType;
-    private EventStatus         status;
-    private Outcome             result;
-    private Integer             homeScore;
-    private Integer             awayScore;
-    private final List<Offer>   offers;
+    private final Long               id;
+    private final String             homeTeam;
+    private final String             awayTeam;
+    private final LocalDateTime      kickOff;
+    private final League             league;
+    private final MarketType         marketType;
+    private final SettlementStrategy strategy;
+    private EventStatus              status;
+    private Outcome                  result;
+    private Integer                  homeScore;
+    private Integer                  awayScore;
+    private final List<Offer>        offers;
 
     public Event(Long id, String homeTeam, String awayTeam, LocalDateTime kickOff,
-                 League league, MarketType marketType) {
+                 League league, MarketType marketType, SettlementStrategy strategy) {
         this.id         = id;
         this.homeTeam   = homeTeam;
         this.awayTeam   = awayTeam;
         this.kickOff    = kickOff;
         this.league     = league;
         this.marketType = marketType;
+        this.strategy   = strategy;
         this.status     = EventStatus.OPEN;
         this.offers     = new ArrayList<>();
     }
@@ -76,7 +78,7 @@ public class Event {
         this.offers.add(offer);
     }
 
-    public void processResult(int homeScore, int awayScore, SettlementStrategy strategy) throws ExchangeException {
+    public void processResult(int homeScore, int awayScore) throws ExchangeException {
         if (this.status != EventStatus.OPEN)
             throw new IllegalBetException("Event is not OPEN — cannot process result");
         this.homeScore = homeScore;

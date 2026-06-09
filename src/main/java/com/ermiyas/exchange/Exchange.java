@@ -3,6 +3,7 @@ package com.ermiyas.exchange;
 import com.ermiyas.exchange.domain.exception.*;
 import com.ermiyas.exchange.domain.model.*;
 import com.ermiyas.exchange.domain.model.user.*;
+import com.ermiyas.exchange.domain.repository.GenericRepository;
 import com.ermiyas.exchange.domain.settlement.SettlementStrategy;
 import com.ermiyas.exchange.domain.settlement.ThreeWaySettlementStrategy;
 
@@ -11,53 +12,54 @@ import java.util.*;
 
 public class Exchange {
 
-    private final Map<Long, User>   users   = new HashMap<>();
-    private final Map<Long, Wallet> wallets = new HashMap<>();
-    private final Map<Long, Event>  events  = new HashMap<>();
-    private final Map<Long, Offer>  offers  = new HashMap<>();
-    private final Map<Long, Bet>    bets    = new HashMap<>();
+    private final GenericRepository<User>  userRepo  = new GenericRepository<>();
+    private final GenericRepository<Event> eventRepo = new GenericRepository<>();
+    private final GenericRepository<Offer> offerRepo = new GenericRepository<>();
+    private final GenericRepository<Bet>   betRepo   = new GenericRepository<>();
 
-    private long userSeq = 1, walletSeq = 1, eventSeq = 1, offerSeq = 1, betSeq = 1;
+    private final Map<Long, Wallet> wallets = new HashMap<>();
+    private long walletSeq = 1;
 
     private final CommissionPolicy commissionPolicy;
     private final Map<MarketType, SettlementStrategy> strategies = new HashMap<>();
 
     public Exchange(CommissionPolicy commissionPolicy) {
         this.commissionPolicy = commissionPolicy;
-        registerStrategy(new ThreeWaySettlementStrategy());
+        registerStrategy(MarketType.THREE_WAY, new ThreeWaySettlementStrategy());
     }
 
-    public void registerStrategy(SettlementStrategy strategy) {
-        strategies.put(strategy.getMarketType(), strategy);
+    public void registerStrategy(MarketType type, SettlementStrategy strategy) {
+        strategies.put(type, strategy);
     }
 
-    // -------------------------------------------------------------------------
-    // User managementmvn package -DskipTests && java -jar target/exchange-1.0.0.jar
-    // -------------------------------------------------------------------------
+
+    // User management
+
 
     public StandardUser register(String username, String email, String password) throws ExchangeException {
         if (usernameTaken(username))
             throw new IdentityConflictException("Username '" + username + "' is already taken");
-        StandardUser user   = new StandardUser(userSeq++, username, email, Password.create(password));
+        long uid     = userRepo.nextId();
+        StandardUser user   = new StandardUser(uid, username, email, Password.create(password));
         Wallet       wallet = new Wallet(walletSeq++, Money.zero());
         user.setWallet(wallet);
-        users.put(user.getId(), user);
-        wallets.put(user.getId(), wallet);
+        userRepo.save(uid, user);
+        wallets.put(uid, wallet);
         return user;
     }
 
     public AdminUser registerAdmin(String username, String email, String password) throws ExchangeException {
         if (usernameTaken(username))
             throw new IdentityConflictException("Username '" + username + "' is already taken");
-        AdminUser admin = new AdminUser(userSeq++, username, email, Password.create(password));
-        users.put(admin.getId(), admin);
+        long uid      = userRepo.nextId();
+        AdminUser admin = new AdminUser(uid, username, email, Password.create(password));
+        userRepo.save(uid, admin);
         return admin;
     }
 
-    // inclusion polymorphism — login works for any User subtype; getRoleName() dispatches at runtime
     public User login(String username, String password) throws ExchangeException {
         User found = null;
-        for (User u : users.values()) {
+        for (User u : userRepo.findAll()) {
             if (u.getUsername().equalsIgnoreCase(username)) {
                 found = u;
                 break;
@@ -69,10 +71,6 @@ public class Exchange {
             throw new UserNotFoundException("Invalid username or password");
         return found;
     }
-
-    // -------------------------------------------------------------------------
-    // Wallet operations — accepts Tradeable (ISP / multityping in action)
-    // -------------------------------------------------------------------------
 
     public void deposit(Tradeable account, Money amount) {
         account.getWallet().deposit(amount);
@@ -88,9 +86,9 @@ public class Exchange {
         return w;
     }
 
-    // -------------------------------------------------------------------------
+
     // Offer operations
-    // -------------------------------------------------------------------------
+
 
     public Long placeOffer(StandardUser maker, Long eventId, Outcome outcome, Odds odds, Money stake)
             throws ExchangeException {
@@ -98,9 +96,10 @@ public class Exchange {
         if (event.getStatus() != EventStatus.OPEN)
             throw new IllegalBetException("Market is " + event.getStatus() + " — no new offers accepted");
         maker.getWallet().reserve(stake);
-        Offer offer = new Offer(offerSeq++, maker, event, outcome, stake, odds);
+        long oid    = offerRepo.nextId();
+        Offer offer = new Offer(oid, maker, event, outcome, stake, odds);
         event.attachOffer(offer);
-        offers.put(offer.getId(), offer);
+        offerRepo.save(oid, offer);
         return offer.getId();
     }
 
@@ -113,31 +112,30 @@ public class Exchange {
         wallets.get(requestingUserId).unreserve(toReturn);
     }
 
-    // -------------------------------------------------------------------------
+
     // Trade (matching)
-    // -------------------------------------------------------------------------
+
 
     public void matchOffer(Long offerId, StandardUser taker, Money stakeToMatch) throws ExchangeException {
         Offer offer = requireOffer(offerId);
         if (offer.getEvent().getStatus() != EventStatus.OPEN)
             throw new IllegalBetException("Market is closed for this event");
         String ref = "BET-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-        Bet    bet = offer.fill(betSeq++, stakeToMatch, taker, ref);
+        long bid   = betRepo.nextId();
+        Bet  bet   = offer.fill(bid, stakeToMatch, taker, ref);
         taker.getWallet().reserve(bet.getTakerLiability());
-        bets.put(bet.getId(), bet);
+        betRepo.save(bid, bet);
     }
 
-    // -------------------------------------------------------------------------
+
     // Admin — settlement
-    // -------------------------------------------------------------------------
+
 
     public void processResult(AdminUser admin, Long eventId, int homeScore, int awayScore)
             throws ExchangeException {
         Objects.requireNonNull(admin, "Admin reference required");
-        Event event    = requireEvent(eventId);
-        SettlementStrategy strategy = strategies.getOrDefault(
-                event.getMarketType(), new ThreeWaySettlementStrategy());
-        event.processResult(homeScore, awayScore, strategy);
+        Event event = requireEvent(eventId);
+        event.processResult(homeScore, awayScore);
     }
 
     public void settleEvent(AdminUser admin, Long eventId) throws ExchangeException {
@@ -161,17 +159,17 @@ public class Exchange {
         event.markSettled();
     }
 
-    // -------------------------------------------------------------------------
-    // Queries
-    // -------------------------------------------------------------------------
 
-    public List<Event> getAllEvents() { return new ArrayList<>(events.values()); }
-    public List<User>  getAllUsers()  { return new ArrayList<>(users.values()); }
+    // Queries
+
+
+    public List<Event> getAllEvents() { return eventRepo.findAll(); }
+    public List<User>  getAllUsers()  { return userRepo.findAll(); }
     public CommissionPolicy getCommissionPolicy() { return commissionPolicy; }
 
     public List<Event> getOpenEvents() {
         List<Event> result = new ArrayList<>();
-        for (Event e : events.values()) {
+        for (Event e : eventRepo.findAll()) {
             if (e.getStatus() == EventStatus.OPEN) {
                 result.add(e);
             }
@@ -187,7 +185,7 @@ public class Exchange {
 
     public List<Offer> getOpenOffersForEvent(Long eventId) {
         List<Offer> result = new ArrayList<>();
-        for (Offer o : offers.values()) {
+        for (Offer o : offerRepo.findAll()) {
             if (Objects.equals(o.getEvent().getId(), eventId)
                     && (o.getStatus() == OfferStatus.OPEN || o.getStatus() == OfferStatus.PARTIALLY_TAKEN)) {
                 result.add(o);
@@ -198,7 +196,7 @@ public class Exchange {
 
     public List<Offer> getOffersForUser(Long userId) {
         List<Offer> result = new ArrayList<>();
-        for (Offer o : offers.values()) {
+        for (Offer o : offerRepo.findAll()) {
             if (Objects.equals(o.getMaker().getId(), userId)) {
                 result.add(o);
             }
@@ -208,7 +206,7 @@ public class Exchange {
 
     public List<Bet> getBetsForUser(Long userId) {
         List<Bet> result = new ArrayList<>();
-        for (Bet b : bets.values()) {
+        for (Bet b : betRepo.findAll()) {
             if (Objects.equals(b.getMaker().getId(), userId)
                     || Objects.equals(b.getTaker().getId(), userId)) {
                 result.add(b);
@@ -217,14 +215,18 @@ public class Exchange {
         return result;
     }
 
-    // -------------------------------------------------------------------------
+
     // Event management
-    // -------------------------------------------------------------------------
+
 
     public Event addEvent(String homeTeam, String awayTeam, LocalDateTime kickOff,
                           League league, MarketType marketType) {
-        Event event = new Event(eventSeq++, homeTeam, awayTeam, kickOff, league, marketType);
-        events.put(event.getId(), event);
+        SettlementStrategy strategy = strategies.get(marketType);
+        if (strategy == null)
+            throw new IllegalArgumentException("No strategy registered for market type: " + marketType);
+        long eid    = eventRepo.nextId();
+        Event event = new Event(eid, homeTeam, awayTeam, kickOff, league, marketType, strategy);
+        eventRepo.save(eid, event);
         return event;
     }
 
@@ -234,26 +236,24 @@ public class Exchange {
         return addEvent(homeTeam, awayTeam, kickOff, league, marketType);
     }
 
-    // -------------------------------------------------------------------------
+
     // Private helpers
-    // -------------------------------------------------------------------------
+
 
     private boolean usernameTaken(String username) {
-        for (User u : users.values()) {
+        for (User u : userRepo.findAll()) {
             if (u.getUsername().equalsIgnoreCase(username)) return true;
         }
         return false;
     }
 
     private Event requireEvent(Long id) throws ExchangeException {
-        Event e = events.get(id);
-        if (e == null) throw new IllegalBetException("Event #" + id + " not found");
-        return e;
+        return eventRepo.findById(id)
+                .orElseThrow(() -> new IllegalBetException("Event #" + id + " not found"));
     }
 
     private Offer requireOffer(Long id) throws ExchangeException {
-        Offer o = offers.get(id);
-        if (o == null) throw new IllegalBetException("Offer #" + id + " not found");
-        return o;
+        return offerRepo.findById(id)
+                .orElseThrow(() -> new IllegalBetException("Offer #" + id + " not found"));
     }
 }

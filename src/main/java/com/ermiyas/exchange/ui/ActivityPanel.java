@@ -31,7 +31,7 @@ public class ActivityPanel extends JPanel {
         add(buildBetsSection());
     }
 
-    // -------------------------------------------------------------------------
+    // 
 
     private JPanel buildOffersSection() {
         JPanel panel = new JPanel(new BorderLayout(4, 4));
@@ -117,7 +117,7 @@ public class ActivityPanel extends JPanel {
         return panel;
     }
 
-    // -------------------------------------------------------------------------
+    // 
 
     private void refreshOffers() {
         offersModel.setRowCount(0);

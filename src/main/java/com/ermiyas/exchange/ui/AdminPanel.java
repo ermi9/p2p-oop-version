@@ -57,7 +57,7 @@ public class AdminPanel extends JPanel {
         add(new JScrollPane(table), BorderLayout.CENTER);
         add(south, BorderLayout.SOUTH);
 
-        // ---- listeners ----
+        //  listeners 
 
         refreshBtn.addActionListener(new ActionListener() {
             @Override
@@ -110,7 +110,7 @@ public class AdminPanel extends JPanel {
         });
     }
 
-    // -------------------------------------------------------------------------
+    // 
 
     private void showAddEventDialog() {
         JTextField         homeField  = new JTextField(14);
@@ -188,7 +188,7 @@ public class AdminPanel extends JPanel {
         }
     }
 
-    // -------------------------------------------------------------------------
+    // 
 
     private JPanel buildForm(Object... pairs) {
         JPanel form = new JPanel(new GridBagLayout());

@@ -4,6 +4,7 @@ import com.ermiyas.exchange.Exchange;
 import com.ermiyas.exchange.domain.model.*;
 import com.ermiyas.exchange.domain.model.user.StandardUser;
 import com.ermiyas.exchange.domain.settlement.HeadToHeadSettlementStrategy;
+import com.ermiyas.exchange.domain.settlement.ThreeWaySettlementStrategy;
 
 import javax.swing.*;
 import java.time.LocalDate;
@@ -13,7 +14,8 @@ public class ExchangeApp {
 
     public static void main(String[] args) {
         Exchange exchange = new Exchange(CommissionPolicy.fivePercent());
-        exchange.registerStrategy(new HeadToHeadSettlementStrategy());
+        exchange.registerStrategy(MarketType.THREE_WAY,    new ThreeWaySettlementStrategy());
+        exchange.registerStrategy(MarketType.HEAD_TO_HEAD, new HeadToHeadSettlementStrategy());
         StandardUser[] players = seedDemoAccounts(exchange);
         seedDemoEvents(exchange, players[0], players[1]);
 

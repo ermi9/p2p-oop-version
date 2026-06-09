@@ -70,7 +70,7 @@ public class MarketsPanel extends JPanel {
         cardsArea.repaint();
     }
 
-    // -------------------------------------------------------------------------
+    // 
 
     private JPanel buildCard(Event event) {
         JPanel card = new JPanel(new BorderLayout(12, 0));
@@ -115,7 +115,7 @@ public class MarketsPanel extends JPanel {
         info.add(Box.createRigidArea(new Dimension(0, 4)));
         info.add(offersLabel);
 
-        // Right: status + action buttons
+        // for positionning status + action buttons
         JPanel actions = new JPanel();
         actions.setLayout(new BoxLayout(actions, BoxLayout.Y_AXIS));
         actions.setOpaque(false);
@@ -177,7 +177,7 @@ public class MarketsPanel extends JPanel {
         return card;
     }
 
-    // -------------------------------------------------------------------------
+    // 
 
     private void showOffersDialog(Event event) {
         List<Offer> offers = exchange.getOpenOffersForEvent(event.getId());

@@ -29,7 +29,7 @@ public class LoginWindow extends JFrame {
         cardLayout.show(cards, "LOGIN");
     }
 
-    // -------------------------------------------------------------------------
+    // 
 
     private JPanel buildLoginPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
@@ -78,7 +78,7 @@ public class LoginWindow extends JFrame {
         return panel;
     }
 
-    // -------------------------------------------------------------------------
+    // 
 
     private JPanel buildRegisterPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
@@ -130,10 +130,7 @@ public class LoginWindow extends JFrame {
         return panel;
     }
 
-    // -------------------------------------------------------------------------
-    // Layout helpers
-    // -------------------------------------------------------------------------
-
+    //layout
     private GridBagConstraints defaultConstraints() {
         GridBagConstraints c = new GridBagConstraints();
         c.fill   = GridBagConstraints.HORIZONTAL;

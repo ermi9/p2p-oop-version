@@ -20,7 +20,7 @@ public class MainWindow extends JFrame {
         tabs.addTab("My Activity", new ActivityPanel(exchange, currentUser));
 
         if ("PLAYER".equals(currentUser.getRoleName())) {
-            tabs.addTab("Wallet", new WalletPanel(exchange, (Tradeable) currentUser));
+            tabs.addTab("Wallet", new WalletPanel(exchange, (Tradeable) currentUser));//i have to find better way to do this, shouldn't be casted.
         }
 
         if ("ADMIN".equals(currentUser.getRoleName())) {

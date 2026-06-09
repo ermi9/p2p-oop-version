@@ -26,7 +26,7 @@ public class WalletPanel extends JPanel {
         build();
     }
 
-    // -------------------------------------------------------------------------
+    // 
 
     private void build() {
         GridBagConstraints c = new GridBagConstraints();
@@ -93,7 +93,7 @@ public class WalletPanel extends JPanel {
         });
     }
 
-    // -------------------------------------------------------------------------
+    // 
 
     private void refreshLabels() {
         Wallet w = account.getWallet();

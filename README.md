@@ -3,7 +3,7 @@
 ![Java](https://img.shields.io/badge/Java-17-orange?logo=java) ![License](https://img.shields.io/github/license/ermi9/p2p-oop-version) ![Stars](https://img.shields.io/github/stars/ermi9/p2p-oop-version?style=social) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
 A peer-to-peer sports betting exchange built entirely in pure Java SE 17 with a Swing desktop UI.
-No frameworks, no databases, no external APIs — all state lives in in-memory maps inside `Exchange.java`.
+No frameworks, no databases, no external APIs — all state lives in four `GenericRepository<T>` instances and a wallet map inside `Exchange.java`.
 
 ---
 
@@ -24,7 +24,7 @@ Two standard user accounts and one admin account are seeded on startup. You can 
 
 ```
 src/main/java/com/ermiyas/exchange/
-├── Exchange.java                    # Application coordinator (holds all in-memory maps)
+├── Exchange.java                    # Application coordinator — four GenericRepository fields
 ├── domain/
 │   ├── exception/                   # ExchangeException hierarchy (5 classes)
 │   ├── model/
@@ -35,14 +35,16 @@ src/main/java/com/ermiyas/exchange/
 │   │   ├── Wallet.java              # No back-reference to User
 │   │   ├── Offer.java               # Partial fills — List<Bet>
 │   │   ├── Bet.java                 # resolve(Outcome, Wallet, Wallet, CommissionPolicy)
-│   │   ├── Event.java               # Owns List<Offer>, processResult(SettlementStrategy)
+│   │   ├── Event.java               # Owns List<Offer> and SettlementStrategy; processResult(int,int)
 │   │   └── user/
 │   │       ├── User.java            # Abstract — authenticate(), getRoleName()
 │   │       ├── StandardUser.java    # extends User implements Tradeable
 │   │       ├── AdminUser.java       # extends User, no wallet
 │   │       └── Tradeable.java       # Interface — deposit/withdraw hook (ISP)
+│   ├── repository/
+│   │   └── GenericRepository.java   # GenericRepository<T> — parametric polymorphism
 │   └── settlement/
-│       ├── SettlementStrategy.java       # Interface — OCP / DIP
+│       ├── SettlementStrategy.java       # Interface — single method: determineWinner()
 │       ├── ThreeWaySettlementStrategy    # HOME_WIN / AWAY_WIN / DRAW
 │       └── HeadToHeadSettlementStrategy  # HOME_WIN / AWAY_WIN only
 └── ui/
@@ -69,11 +71,11 @@ src/main/java/com/ermiyas/exchange/
 | Ad-hoc polymorphism | Money.plus(Money) vs Money.plus(BigDecimal) vs Money.multiply(BigDecimal) |
 | Inclusion polymorphism | User references — login returns User, getRoleName() dispatches at runtime |
 | Coercion polymorphism | Money.of(String) → Money.of(BigDecimal) |
-| Parametric polymorphism | Exchange's Map\<Long,User\>, List\<Offer\> in Event, etc. |
+| Parametric polymorphism | `GenericRepository<T>` — designed generic abstraction over any domain type; also `Map<Long,T>`, `List<Offer>` in Event |
 | Multityping | StandardUser as StandardUser + User + Tradeable simultaneously |
 | OCP | SettlementStrategy — new market type without touching Event |
 | LSP | AdminUser has no getWallet() — no exception-throwing override |
-| ISP | Tradeable is focused (wallet ops only); SettlementStrategy is focused |
+| ISP | Tradeable is focused (wallet ops only); SettlementStrategy has one method only — `determineWinner()` |
 | DIP | Exchange.deposit/withdraw depend on Tradeable; Event.processResult depends on SettlementStrategy |
 
 ---
